@@ -16,13 +16,13 @@
   Acceptance: `npm run dev` serves the placeholder page on `localhost:3000`. `npm run build` succeeds. `npx vitest run` runs (zero tests, zero failures).
   Verify: Run `npm run dev`, open `http://localhost:3000`, confirm the placeholder page renders. Run `npm run build` and confirm a successful production build. Run `npx vitest run` and confirm exit code 0.
 
-- [ ] **2. Deploy hello-world to Vercel**
+- [x] **2. Deploy hello-world to Vercel**
   Spec ref: `spec.md > Runtime & Deployment`
   What to build: Initialize a public GitHub repo for the project. Push the item-1 scaffold. Connect the repo to Vercel as a new Hobby-tier project. Trigger a preview deployment from `main`. The deploy must succeed without modifications. Confirm the default `*.vercel.app` URL is reachable. (No custom domain.)
   Acceptance: A Vercel deployment URL exists, returns 200, and renders the placeholder page from item 1. The repo is visible publicly on GitHub.
   Verify: Open the Vercel deployment URL in a clean browser. Confirm the placeholder page loads. Confirm the GitHub repo is browsable in an incognito window.
 
-- [ ] **3. Foundation library modules + tests**
+- [x] **3. Foundation library modules + tests**
   Spec ref: `spec.md > Library (lib/) > lib/types.ts`, `lib/slug.ts`, `lib/baseUrl.ts`, `lib/makes.ts`, `lib/years.ts`
   What to build: Implement the five foundation modules with the exact exports and types specified in `spec.md`. `lib/types.ts` exports `SourceKey`, `Recall`, `SubScore`, `Profile`, `SourceLink` per the spec's TypeScript block. `lib/makes.ts` exports `TOP_50_MAKES` with the 50 names locked in `prd.md > Entering a Vehicle > US-1`. `lib/years.ts` exports `availableYears()` returning `[currentYear+1 .. 1981]`. `lib/slug.ts` exports `encodeQuery({year, make, model})` and `decodeQuery(slug)` per the spec's slug rule (`lowercase + spaces→underscores`, hyphens passed through). `lib/baseUrl.ts` exports `absoluteApiUrl(path)` with the three-branch resolver: `VERCEL_ENV === 'production'` → `VERCEL_PROJECT_PRODUCTION_URL`; else `VERCEL_URL`; else `BASE_URL || 'http://localhost:3000'`. Write Vitest tests for `slug.test.ts` (round-trip + Mercedes-Benz + Land Rover + unknown make) and `baseUrl.test.ts` (all three branches via env-var stubbing).
   Acceptance: `npx vitest run` passes with all foundation tests green. `lib/types.ts` exports compile under `tsc --noEmit`. `decodeQuery("2007-honda-civic")` returns `{year: 2007, make: "Honda", model: "Civic"}`. `decodeQuery("2008-frod-f150")` returns `null` (Frod not in `TOP_50_MAKES`).

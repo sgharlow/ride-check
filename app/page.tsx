@@ -3,11 +3,13 @@
  *
  * Spec ref: docs/spec.md > Frontend > Landing Page.
  *
- * Server-component shell. Renders the InputForm inside a calm, restrained
- * single-column layout. SampleVehicles is intentionally NOT rendered here yet
- * — that's checklist item 10.
+ * Server-component shell. Renders InputForm + SampleVehicles inside a calm,
+ * restrained single-column layout. SampleVehicles (US-6) is the first feature
+ * cuttable per the prd cut policy — to drop it, delete the import + element
+ * below and delete `components/SampleVehicles.tsx`.
  */
 import InputForm from '@/components/InputForm';
+import SampleVehicles from '@/components/SampleVehicles';
 
 export default function Home() {
   return (
@@ -22,6 +24,8 @@ export default function Home() {
           </p>
         </header>
         <InputForm />
+        <div className="my-8 border-t border-gray-200" />
+        <SampleVehicles />
       </div>
     </main>
   );

@@ -1,0 +1,3 @@
+# Screenshots are captured manually after this directory is committed.
+# Steve will commit them in a separate commit with `git add -f`.
+screenshots/

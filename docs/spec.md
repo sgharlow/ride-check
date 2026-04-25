@@ -103,9 +103,9 @@ Implements `prd.md > First Impression and Discovery > US-6`.
 
 - Client component.
 - Three preset cards covering the grade range:
-  - **2007 Honda Civic / 180,000 mi** — F-grade demo car (Takata airbag-era recalls).
-  - **2014 Volkswagen Passat / 150,000 mi** — D-grade demo car (multi-category recalls; honest answer to a curious dieselgate query).
-  - **2018 Toyota Camry / 60,000 mi** — B-grade demo car (clean record, modern emissions).
+  - **2007 Honda Civic / 180,000 mi / $4,500** — F-grade demo car (Takata airbag-era recalls).
+  - **2014 Volkswagen Passat / 150,000 mi / $9,500** — C-grade demo car (multi-category recalls; honest answer to a curious dieselgate query).
+  - **2023 Toyota RAV4 / 30,000 mi / $32,000** — B-grade demo car (modern, clean record). *(Swapped from 2018 Camry during item 7 build verification — Camry's NHTSA recall list had grown to ~8 entries including fuel-system and airbag recalls, flooring its recall sub-score under the locked formula. RAV4 has 3 recalls and lands at composite ~79 → B.)*
 - Click handler: identical to `InputForm` submit — builds slug, pushes the route. Does **not** short-cut to a static result; the live API path is the demo path.
 - **Cut policy:** US-6 is the first feature dropped if Day 4 runs late. To cut: delete `<SampleVehicles />` from `app/page.tsx` and delete the file. No cascading impact.
 

@@ -228,7 +228,7 @@ export async function buildProfile(input: BuildProfileInput): Promise<Profile> {
     {
       key: 'emissions',
       label: 'EPA Tier methodology',
-      url: 'https://www.epa.gov/vehicle-and-fuel-emissions-testing/light-duty-vehicle-emission-standards',
+      url: 'https://www.epa.gov/regulations-emissions-vehicles-and-engines/final-rule-control-air-pollution-motor-vehicles-tier-3',
     },
     {
       key: 'methodology',

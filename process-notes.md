@@ -106,3 +106,54 @@
   - **The deploy-hello-world-at-item-2 pattern is highly transplantable.** The senior-engineer instinct is to defer deployment to "after the app works." The workshop lesson: deploy the scaffold *before* it does anything, so deployment becomes a one-line concern instead of a Day-4 blocker.
   - **Pure functions first / UI last is also transplantable.** Steve recognized this without prompting. Worth surfacing in the workshop as the explicit principle: "If it can be unit-tested without a browser, build it before anything that needs a browser."
   - **Five-field item format as a contract with /build.** Title + spec ref + what-to-build + acceptance + verify. Each field is mandatory because /build's failure mode is filling in ambiguity with confident guesses. The format eliminates that failure mode at the planning step. Direct parallel to /spec's lesson about ambiguity = coin flip; /checklist applies it at the next level of granularity.
+
+## /build
+
+**Autonomous summary — items 1–12 complete, Steve still has to click Submit on Devpost.**
+
+- **Total items completed by subagents:** 11 (items 1–11). Item 12 produced all submission materials but the actual Devpost click-through is a Steve action.
+- **Total tests at build end:** 139 passing (10 test files). Foundation lib: 30 (slug 22, baseUrl 8). Scoring lib: 83 (severity 16, recalls 8, complaints 10, safety 10, emissions 10, ageWear 11, composite 18). Verdict generator: 26.
+- **Total commits pushed:** 12 (one per item plus the submission materials commit).
+- **Final production URL:** https://ride-check.vercel.app
+- **GitHub repo:** https://github.com/sgharlow/ride-check (public, MIT)
+
+**Checklist revisions made during the build (3 of them):**
+
+1. **Demo car swap (mid-item-7).** The locked recall formula `100 − 15 × Σ severity` floors any car with severity sum ≥ 7. Live NHTSA data showed the 2018 Toyota Camry (originally listed as the B/A demo car in spec.md and prd.md) had 8 recalls weighted to ~15, scoring composite 62 → C, not B. Steve picked option (β): keep formula honest, swap demo car. Verified 2023 Toyota RAV4 (3 recalls, severity sum 3.5) lands at composite ~79 → B with the same locked formula. Updated spec.md and checklist.md items 9, 10, 12. The formula didn't budge.
+
+2. **Item 9 spec deviation: `force-dynamic` on the result page.** Subagent encountered Next.js 14 dev-mode webpack module-ID corruption and added `export const dynamic = 'force-dynamic'` to `app/profile/[query]/page.tsx`. Doesn't disable the underlying API fetch cache (which still runs `revalidate: 86400`); only stops the page from being statically pre-collected. Production behavior unchanged. Documented inline in code.
+
+3. **EPA URL drift (item 11).** The EPA Tier methodology URL listed in spec.md (`/light-duty-vehicle-emission-standards`) returned 404. Subagent discovered this during the §8.4 link-resolution check and replaced with the live URL (`/regulations-emissions-vehicles-and-engines/final-rule-control-air-pollution-motor-vehicles-tier-3`) in BOTH README.md and `lib/profile.ts` so the rendered Sources strip and the README stay in sync.
+
+**Checkpoint observations (from Steve):**
+- Checkpoint 1 (after item 5): approved with single Y after seeing the two verdict outputs. The F-grade Civic verdict ("six unrepaired airbag inflator recalls") landed.
+- Checkpoint 2 (after item 8): approved with single Y after the demo-car swap explanation. Steve picked (β) without hesitation.
+- Checkpoint 3 (after item 10): approved with single Y. Sample cards rendering, all three preset values correct.
+
+**Real product/data findings the live API surfaced (pivotal for the SDD-vs-AI-agents teaching artifact):**
+
+- **Dieselgate is an EPA enforcement action, not an NHTSA recall.** /spec caught this; /build re-confirmed by inspecting the 2014 Passat's actual NHTSA recall list (10 recalls but none is the defeat-device cheat). The 2014 Passat still grades C honestly; the original "type the dieselgate Passat, see the verdict pop" demo narrative was rewritten in /spec to lean on Takata/2007 Civic instead. /build re-validated this against real data.
+- **NCAP returns "Not Rated" for all 3 trims of the 2007 Honda Civic** (modern crash-test methodology started in 2011). The flagship F-grade demo car renders with Safety = "data unavailable" and the renormalization disclosure visible. Honest output; arguably *better* for the transparency story than every bar always being filled.
+- **The recall formula's aggressiveness vs. real recall counts.** `100 − 15 × Σ severity` floors most cars with 5+ recalls. The 2018 Camry (originally the B/A demo) and the 2014 Passat (originally the D demo) both score C-or-below in the wild because every modern manufacturer accumulates 5+ recalls within a few years. This is the kind of finding /spec couldn't catch from API research alone — it required running the actual orchestrator against real data. Steve picked the right call (swap demo car, don't tune formula) to preserve the "transparency over targeting" principle.
+
+**Subagent honesty observations (worth flagging for /reflect's workshop angle):**
+- Every subagent flagged real spec ambiguities and decisions instead of papering over them. Examples: NCAP→"crash-test" rename in verdict (item 5), `force-dynamic` deviation (item 9), `next/link` → `<a>` swap (item 9), EPA URL fix (item 11), DESCRIPTION.md word count overrun (item 12, 765 vs. 500–700 target).
+- The "If anything blocks for more than 3 minutes, STOP and report" instruction landed. Item 6 surfaced the NCAP `null` finding instead of swallowing it. Item 7 surfaced the Camry C-grade demo failure instead of papering it. Both required Steve's judgment, both got it.
+- The subagents did NOT mock services, did NOT add scope, did NOT change contracts between modules. The CLAUDE.md anti-shortcut rules baked into every subagent prompt held.
+
+**Embedded scoreboard at build end:**
+- **Item-level acceptance:** 11/11 items had their acceptance criteria met or honestly negotiated (Camry swap was the one negotiation).
+- **PRD coverage:** every story (US-1, US-1a, US-2, US-3, US-5, US-6, US-7) renders correctly on the deployed URL. US-4 (VIN entry) was demoted to stretch in /scope and never built. ✓
+- **Section 8 hygiene:** §8.4 README review checklist all 10 boxes pass; banned-phrase grep against public artifacts returned zero matches.
+- **Vercel cold-start vs. SLO:** 5018ms on cold (right at the 5s SLO ceiling per /spec finding-1). Documented in spec.md Open Issues; PRD treated SLO as best-effort.
+
+**Teachability moments flagged for /reflect (the workshop transplant analysis):**
+- **/build's value lives in the subagent prompt template.** The five-field checklist item gives the subagent a contract, the full spec.md gives architectural context, the CLAUDE.md anti-shortcut rules disable the AI's worst failure modes. Without those, the autonomous build would have produced different (and worse) code. Workshop-ready as an explicit pattern: every subagent dispatch carries the spec + the rules.
+- **Item 2's deploy-hello-world-early principle paid off enormously.** Vercel's "first deploy is production by default" surprise surfaced on Day 1, not Day 4. The `lib/baseUrl.ts` three-branch resolver was tested across local-dev / preview / production environments organically. Translates 1:1 to the workshop.
+- **Live-API research during the build was the highest-leverage activity.** Every "loud flag" in the build (Camry C-grade, NCAP null, EPA URL 404) came from a subagent hitting real APIs as part of acceptance verification. None would have surfaced from local Vitest fixtures alone. This is the single most-translatable beat for the team workshop: *integrate against real upstream services on the day you build the client, not the day you deploy.*
+- **Honest reporting from subagents was load-bearing.** Every spec deviation, edge-case decision, and live-data surprise was surfaced in the subagent's response. This requires explicit instruction in every prompt — the AI's default failure mode is to produce confident-looking summaries that don't reveal compromises. Workshop-ready: include "report all deviations and ambiguities; don't paper over" as a standing instruction in every agent prompt.
+
+**Items still requiring Steve action:**
+- Capture 4 screenshots per `submission/SCREENSHOT_INSTRUCTIONS.md`.
+- Walk `submission/SUBMISSION_STEPS.md` 1→13 on Devpost.
+- Mark item 12 `[x]` in `docs/checklist.md` after the green "Submitted" badge appears.

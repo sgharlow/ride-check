@@ -10,6 +10,8 @@
 
 ## Checklist
 
+> **Note on CHECKPOINT lines:** The three `- [ ] CHECKPOINT after item N` lines below are build-flow pause markers (the agent stops and waits for the learner to confirm before continuing). They are NOT incomplete tasks. All checkpoints were reached during the build session; the `[ ]` boxes are intentionally left un-ticked because they are separators, not deliverables.
+
 - [x] **1. Scaffold the Next.js 14 project**
   Spec ref: `spec.md > Stack` and `spec.md > Runtime & Deployment`
   What to build: Initialize a Next.js 14 App Router project at the repo root using `create-next-app` with TypeScript, Tailwind, ESLint, and the App Router enabled. Pin Node 20 in `.nvmrc`. Add Vitest with `vitest.config.ts` configured for `tests/**/*.test.ts`. Create the empty directory skeleton: `app/`, `components/`, `lib/upstream/`, `lib/scoring/`, `tests/scoring/`. Write a placeholder `app/layout.tsx` (root layout with the Tailwind base import, page title `RideCheck — public-data risk profile for any used car`) and a placeholder `app/page.tsx` that renders a single `<main>` with the project name. Add MIT `LICENSE`. Add `.env.local` with `BASE_URL=http://localhost:3000`. Add `.gitignore`.

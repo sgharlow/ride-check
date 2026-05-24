@@ -24,7 +24,7 @@ Five sub-scores, each backed by a single named public source.
 
 **Safety** uses NHTSA's NCAP crash-test ratings, scaled from stars to 0-100. If a vehicle has no NCAP rating, the bar reads "data unavailable" and the composite renormalizes across the remaining four sub-scores.
 
-**Emissions** is derived locally from the model year against published EPA Tier definitions.
+**Emissions** is derived locally from the model year against published EPA Tier definitions. There is no runtime EPA API call — the lookup is a static table embedded in the scoring library (year ranges: ≥2017 → Tier 3, 2004–2016 → Tier 2, 1994–2003 → Tier 1, <1994 → pre-Tier 1).
 
 **Age & Wear** is a two-input formula on the model year and the user-entered mileage, with a year-only fallback if mileage is left at zero.
 
@@ -34,7 +34,7 @@ The five sub-scores get a weighted-sum composite, which maps to a letter band (A
 
 This was a five-day spec-driven build using the hackathon-in-a-plugin curriculum. The conversation walked from `/onboard` to `/scope` to `/prd` to `/spec` to `/checklist` to `/build`, with each command writing one durable artifact before any code got written. The full journey is captured in `process-notes.md`, attached as supplementary material.
 
-Two moments earned the approach its keep. First, the `/spec` command's live-API research surfaced that the original demo car (a 2014 VW Passat, picked for its emissions story) returns ten ordinary recalls in NHTSA's API but the relevant emissions issue does not appear there — it lives in EPA enforcement records, separate. Catching that during spec instead of during build let me swap to a 2007 Honda Civic with verified Takata airbag recalls; the F-grade demo lands honestly. Second, the verdict generator carries a hedge-word linter that rejects any output containing "may have," "some," "potentially," "might," or "possibly." The verdict has to commit. Both came out of conversations that happened on paper before code shipped. 139 unit tests cover the scoring formula and the verdict generator directly.
+Two moments earned the approach its keep. First, the `/spec` command's live-API research surfaced that the original demo car (a 2014 VW Passat, picked for its emissions story) returns ten ordinary recalls in NHTSA's API but the relevant emissions issue does not appear there — it lives in EPA enforcement records, separate. Catching that during spec instead of during build let me swap to a 2007 Honda Civic with verified Takata airbag recalls; the F-grade demo lands honestly. Second, the verdict generator carries a hedge-word linter that rejects any output containing "may have," "some," "potentially," "might," or "possibly." The verdict has to commit. Both came out of conversations that happened on paper before code shipped. 139 unit tests cover the scoring formula and the verdict generator directly. (This figure is an at-submission snapshot; there is no continuous CI gate — the project is deployed via Vercel on push, with test runs performed manually.)
 
 ## What's next
 

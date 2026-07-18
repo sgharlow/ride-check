@@ -1,3 +1,5 @@
+> 📦 **Archived** — RideCheck: hackathon entry (Devpost), submitted spring 2026. Event concluded; not maintained. Code and history remain browsable.
+
 # RideCheck — public-data risk profile for any used car
 
 A v0 concept demo that gives prospective used-car shoppers a transparent A–F letter grade for any year/make/model, computed entirely from free public data (NHTSA + EPA Tier definitions). Inspired by FICO score cards and the NHTSA five-star safety rating; positioned in the empty cell on the comparator grid where AutoCheck and Carfax sit (clean visual restraint with a clear verdict) but with the math in the open.
